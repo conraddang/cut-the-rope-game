@@ -1,5 +1,8 @@
 #include "environment.h"
 #include "ui_environment.h"
+#include "plant.h"
+
+
 
 #include <Box2D/box2d/box2d.h>
 #include <QDebug>
@@ -11,59 +14,49 @@
 #include <QGraphicsSceneMouseEvent>
 
 #include <spider.h>
-#include <bubble.h>
 #include <portal.h>
-#include <secportal.h>
+#include <web.h>
+#include <fly.h>
+#include <trampoline.h>
+#include <rectangleBody.h>
 
-qreal fromB2(qreal value) {
-    return value*SCALE;
-}
 
-qreal toB2(qreal value) {
-    return value/SCALE;
-}
 
-Environment::Environment(QWidget *parent)
-    : QWidget(parent)
-    , ui(new Ui::Environment)
-{
-    ui->setupUi(this);
+Scene::Scene(qreal x, qreal y, qreal width, qreal height, b2World *world, Cutter* cutter)
+    : QGraphicsScene(x, y, width, height)
 
-    world = new b2World(b2Vec2(0.00f, 10.00f));
-    scene = new Scene(0, 0, 8, 6, world);
-
-    QGraphicsView * view = new QGraphicsView(scene);
-
-    view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    view->show();
-    view->setFixedSize(800,600);
-    scene->setSceneRect(0, 0, 800, 600);
-
-    scene -> addItem(new Spider(world, QSizeF(1, 1.2), QPointF(1, 0), 0));
-
-    frameTimer = new QTimer(this);
-    connect(frameTimer, SIGNAL(timeout()), scene, SLOT(advance()));
-    frameTimer->start(1000/60);
-}
-
-Environment::~Environment()
-{
-    delete ui;
-}
-
-Scene::Scene(qreal x, qreal y, qreal width, qreal height, b2World *world)
-    : QGraphicsScene(fromB2(x), fromB2(y), fromB2(width), fromB2(height))
 {
     this->world = world;
+    this->cutter = cutter;
 }
+
+//------------------------------------------
 
 void Scene::advance() {
     world->Step(1.00f/60.00, 6, 2);
     QGraphicsScene::advance();
 }
 
+//------------------------------------------
+
 void Scene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-
+    cutter->setPos(event->scenePos().x(), event->scenePos().y());
+    addItem(cutter);
 }
+
+//------------------------------------------
+
+void Scene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+{
+    cutter->setPos(event->scenePos().x(), event->scenePos().y());
+}
+
+//------------------------------------------
+
+void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+{
+    removeItem(cutter);
+}
+
+

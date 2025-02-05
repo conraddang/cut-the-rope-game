@@ -1,7 +1,10 @@
 #include <spider.h>
-#include <bubble.h>
 #include <trampoline.h>
 #include <environment.h>
+#include <gameover.h>
+#include <win.h>
+#include <web.h>
+#include <levelbase.h>
 
 #include <Box2D/box2d/box2d.h>
 #include <QDebug>
@@ -11,68 +14,168 @@
 #include <QGraphicsView>
 #include <QTimer>
 #include <QList>
-#include <iostream>
+#include <QImage>
 
 
-qreal fromB2_s(qreal value) {
-    return value*SCALE;
-}
+Spider::Spider(b2World *world, qreal radius, QPointF initPos)
+: QGraphicsEllipseItem(0){
 
-qreal toB2_s(qreal value) {
-    return value/SCALE;
-}
+    this -> m_scene = scene();
 
-Spider :: Spider (b2World *world, QSizeF size, QPointF initPos, qreal angle) {
-    setRect(-fromB2_s(size.width()/2), -fromB2_s(size.height()/2), fromB2_s(size.width()), fromB2_s(size.height()));
-    setBrush(QBrush(Qt::gray));
-    setPos(fromB2_s(initPos.x()), fromB2_s(initPos.y()));
-    setRotation(angle);
+    setRect(-radius*100, -radius*100, radius*2*100, radius*2*100);
+    setBrush(QBrush(Qt::black));
+    setPos(initPos.x()*100, initPos.y()*100);
 
     b2BodyDef bodyDef;
     bodyDef.type = b2_dynamicBody;
     bodyDef.position.Set(initPos.x(), initPos.y());
-    //bodyDef_1.linearDamping = 0.2;
-    bodyDef.angle = 3.14*angle/180;
+    bodyDef.linearDamping = 0.2;
 
     body = world->CreateBody(&bodyDef);
 
-    //b2PolygonShape shape;
-    shape.SetAsBox(size.width()/2, size.height()/2, b2Vec2(20,0), 0);
-    body->CreateFixture(&shape, 0.001f);
+    b2CircleShape shape;
+    shape.m_radius = radius;
+
+    b2Fixture* fixture = body->CreateFixture(&shape, 1.0f);
+    fixture->SetRestitution(0.7);
+
 
     QTimer * timer = new QTimer();
-    //connect(timer, SIGNAL(timeout()), this, SLOT(ContactSpiderPortal()));
+    connect(timer, SIGNAL(timeout()), this, SLOT(collision_tram()));
+    connect(timer, SIGNAL(timeout()), this, SLOT(ContactSpiderWeb()));
+    connect(timer, SIGNAL(timeout()), this, SLOT(OutOfBoundaries()));
     timer->start(50);
 }
+
+//------------------------------------------
 
 Spider :: ~Spider() {
     body -> GetWorld() -> DestroyBody(body);
 }
 
+//------------------------------------------
+
 void Spider::advance(int phase)
 {
     if(phase) {
-        setPos(fromB2_s(body->GetPosition().x), fromB2_s(body->GetPosition().y));
+        setPos(body->GetPosition().x*100, body->GetPosition().y*100);
     }
 }
 
-void Spider :: ContactSpiderPortal() {
+//------------------------------------------
+
+void Spider :: OutOfBoundaries() {
     b2Transform transf_sp = body -> GetTransform();
 
-    std::cout << transf_sp.p.x << std::endl;
-    std::cout << transf_sp.p.y << std::endl;
+    // left side
+    if(transf_sp.p.x < 0.25) {
+        scene()->removeItem(this);
+        delete this;
 
-    if(0.7 < transf_sp.p.x) {
-        if (transf_sp.p.x < 1.3) {
-            if(1.7 < transf_sp.p.y) {
-                if(transf_sp.p.y  < 2.3) {
-                    body -> SetTransform(b2Vec2(5, 3), 0);
-                }
-            }
-        }
+        gameover* window = new gameover;
+        window->show();
+
+        game_over->setVolume(getSoundVal());
+        game_over->play();
+
+        return;
+    }
+
+    // right side
+    else if(transf_sp.p.x > 11.75) {
+        scene()->removeItem(this);
+        delete this;
+
+        gameover* window = new gameover;
+        window->show();
+
+        game_over->setVolume(getSoundVal());
+        game_over->play();
+
+        return;
+    }
+
+    // top
+    else if(transf_sp.p.y < 0.25) {
+        scene()->removeItem(this);
+        delete this;
+
+        gameover* window = new gameover;
+        window->show();
+
+        game_over->setVolume(getSoundVal());
+        game_over->play();
+
+        return;
     }
 }
 
-void Spider :: ContactTrampoline() {
+//------------------------------------------
+
+void Spider :: ContactSpiderWeb() {
+    QList<QGraphicsItem *> colliding_items = collidingItems();
+        for(int i = 0, n = colliding_items.size(); i < n; i++){
+            if (typeid(*(colliding_items[i])) == typeid(Web)){
+
+                //saving the result
+                FinalScore("1level.txt", "1level_current.txt");
+                FinalScore("2level.txt", "2level_current.txt");
+                FinalScore("3level.txt", "3level_current.txt");
+                FinalScore("4level.txt", "4level_current.txt");
+                FinalScore("5level.txt", "5level_current.txt");
+
+                //the result saved
+                scene()->removeItem(this);
+                delete this;
+
+                winning->setVolume(getSoundVal());
+                winning->play();
+                win *window = new win;
+                window -> show();
+
+            }
+        }
+}
+
+//------------------------------------------
+
+void Spider :: collision_tram() {
+    QList<QGraphicsItem *> colliding_items = collidingItems();
+        for(int i = 0, n = colliding_items.size(); i < n; i++){
+            if (typeid(*(colliding_items[i])) == typeid(Trampolin)){
+
+                tram_poline->setVolume(getSoundVal());
+                tram_poline->play();
+
+            }
+        }
+}
+
+//------------------------------------------
+
+void Spider::FinalScore(string level, string currentResult)
+{
+
+    int bestScore = 0;
+    int currentScore = 0;
+    ifstream myfile;
+    myfile.open(level);
+    myfile >> bestScore;
+    myfile.close();
+    myfile.open(currentResult);
+    myfile >> currentScore;
+    myfile.close();
+
+    //" = " is iincluded so "0" result can be also saved
+    if(bestScore <= currentScore)
+    {
+        ofstream myfile;
+        myfile.open(level);
+        myfile << to_string(currentScore);
+        myfile.close();
+    }
+
 
 }
+
+

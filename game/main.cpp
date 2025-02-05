@@ -1,12 +1,11 @@
 #include <environment.h>
 #include <cutter.h>
 #include <spider.h>
-#include <threads.h>
-#include <bubble.h>
+#include <spiderThread.h>
 #include <fly.h>
-#include <menu.h>
 #include <trampoline.h>
 #include <plant.h>
+#include <startwindow.h>
 
 #include <QApplication>
 #include <QGraphicsScene>
@@ -19,9 +18,11 @@
 
 int main(int argc, char *argv[])
 {
+
     QApplication a(argc, argv);
 
-    Environment env;
+    StartWindow sw;
+    sw.show();
 
     return a.exec();
 }

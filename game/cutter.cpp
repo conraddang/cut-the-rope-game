@@ -1,18 +1,45 @@
-#include <cutter.h>
-#include <environment.h>
-#include <threads.h>
-#include<iostream>
+#include "cutter.h"
+#include "spiderThread.h"
 
-Cutter :: Cutter () {
-    std::cout << "Cutter" << std::endl;
-    //add design, characteristics and location of fly
+#include <QBrush>
+#include <QTimer>
+#include <QGraphicsScene>
+
+#include <QDebug>
+
+Cutter::Cutter(QVector<SpiderThread*> spiderThreadList)
+{
+    setRect(-0.05*100, -0.05*100, 0.05*2*100, 0.05*2*100);
+    setBrush(QBrush(Qt::white));
+    setPos(-25, -25);
+
+    QTimer * timer = new QTimer();
+    connect(timer, SIGNAL(timeout()), this, SLOT(cutTheSpiderThread()));
+    timer->start(1);
+
+    this->spiderThreadList = spiderThreadList;
 }
 
-void Cutter :: ClickScreen(){
+//------------------------------------------
+
+Cutter::~Cutter()
+{
 
 }
 
-void Cutter :: TouchTread() {
-    Threads tr;
-    tr.ContactCutter();
+//------------------------------------------
+
+void Cutter::cutTheSpiderThread()
+{
+    QList<QGraphicsItem *> colliding_items = collidingItems();
+    for(int i = 0, n = colliding_items.size(); i < n; i++){
+        if (typeid(*(colliding_items[i])) == typeid(SpiderThreadBody)){
+            cut->setVolume(getSoundVal());
+            cut->play();
+            scene()->removeItem(colliding_items[i]);
+            delete colliding_items[i];
+            return;
+
+        }
+}
 }

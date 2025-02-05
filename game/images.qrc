@@ -1,0 +1,24 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>images/cabo1.png</file>
+        <file>images/plant2.png</file>
+        <file>images/wood.jpg</file>
+        <file>images/orange2.jpg</file>
+        <file>images/orange1.png</file>
+        <file>images/hat_bl.png</file>
+        <file>images/fly.png</file>
+        <file>images/hat_prpl.png</file>
+        <file>images/brown.jpg</file>
+        <file>images/web_pic.png</file>
+        <file>images/plant3.png</file>
+        <file>images/stars0.png</file>
+        <file>images/stars1.png</file>
+        <file>images/stars3.png</file>
+        <file>images/ITSY BITSY TERRY .png</file>
+        <file>images/stars2.png</file>
+        <file>images/spikes.png</file>
+        <file>images/gameover.jpeg</file>
+        <file>images/win.jpeg</file>
+        <file>images/jelly.png</file>
+    </qresource>
+</RCC>

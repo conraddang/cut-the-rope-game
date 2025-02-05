@@ -1,0 +1,14 @@
+<RCC>
+    <qresource prefix="/audio">
+        <file>terry_menu.mp3</file>
+        <file>button.mp3</file>
+        <file>swoosh.mp3</file>
+        <file>crunch.mp3</file>
+        <file>bouncy.mp3</file>
+        <file>win.mp3</file>
+        <file>gameover.mp3</file>
+        <file>portal.mp3</file>
+        <file>terry_mix.mp3</file>
+        <file>terry_what.mp3</file>
+    </qresource>
+</RCC>
