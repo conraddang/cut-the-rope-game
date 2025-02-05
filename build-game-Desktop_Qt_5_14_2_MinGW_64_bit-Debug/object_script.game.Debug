@@ -1,0 +1,14 @@
+debug/bubble.o
+debug/cutter.o
+debug/environment.o
+debug/fly.o
+debug/main.o
+debug/menu.o
+debug/plant.o
+debug/portal.o
+debug/secportal.o
+debug/spider.o
+debug/threads.o
+debug/trampoline.o
+debug/moc_environment.o
+debug/moc_spider.o

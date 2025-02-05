@@ -1,0 +1,14 @@
+release/bubble.o
+release/cutter.o
+release/environment.o
+release/fly.o
+release/main.o
+release/menu.o
+release/plant.o
+release/portal.o
+release/secportal.o
+release/spider.o
+release/threads.o
+release/trampoline.o
+release/moc_environment.o
+release/moc_spider.o
