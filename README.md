@@ -2,7 +2,7 @@
 
 # Itsy Bitsy Terry
 
-Itsy Bitsy Terry is a fun and entertaining game for all ages – both for the little ones and the grown-ups! Help Terry cut his spider threads so he can return to his beloved spider web! But watch out for the evil plants – they are trying to eat Terry! Along the way, there are some objects that could help you. Use them wisely!
+Itsy Bitsy Terry is a fun and entertaining game for all ages, inspired by the game Cut The Rope – both for the little ones and the grown-ups! Help Terry cut his spider threads so he can return to his beloved spider web! But watch out for the evil plants – they are trying to eat Terry! Along the way, there are some objects that could help you. Use them wisely!
 
 ![](game/images/preview.png)
 
