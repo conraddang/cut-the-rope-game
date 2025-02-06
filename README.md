@@ -4,6 +4,8 @@
 
 Itsy Bitsy Terry ist ein spaßiges und unterhaltendes Spiel für jedes Alter - für die ganz Kleinen aber auch für die Großen! Helfe Terry seine Spinnenfäden zu durchschneiden, damit er wieder sein geliebtes Spinnennetz erreichen kann! Aber pass auf die bösen Pflanzen auf, sie versuchen Terry zu essen! Auf dem Weg sind einige Objekte platziert, die dir helfen könnten. Nutze sie bedacht!
 
+![](game/images/preview.png)
+
 ## Spielanleitung
 
 - Halte die linke Maustaste gedrückt, um den Zerschneider zu aktivieren. Halte sie gedrückt und bewege die Maus, um die Position des Zerscheiders zu verändern. Berührst der Zerscheider den Spinnenfaden, wird dieser an der entsprechenden Stelle geschnitten. Lasse die linke Maustaste los, um den Zerscheider wieder zu deaktivieren.
